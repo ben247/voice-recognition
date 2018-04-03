@@ -8,72 +8,113 @@
 </head>
 
 <body>
-<!-- Begin div for speech transcript -->
-  <div class="words"> 
+  <!-- Begin div for speech transcript -->
+  <div class="words">
   </div>
-<!-- Begin script -->
+  <!-- Begin script -->
   <script>
 
 
 
-/* Initiating the SpeechRecognition service on the window object and setting it to SpeechRecognition or webkitSpeechRecognition
-for the Chrome prefix */
+    /* Initiating the SpeechRecognition service on the window object and setting it to SpeechRecognition or webkitSpeechRecognition
+    for the Chrome prefix */
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  
-
-
-/* Create a new instance of SpeechRecognition using the const declaration as it is a read-only variable */
-  const recognition = new SpeechRecognition();
-  /* interimResults is the property that sets the results of the speech recognition as final.
-Setting this to true allows the results to be displayed as the user speaks rather than once the user has finished */
-  recognition.interimResults = true;
-  recognition.lang = 'en-GB'; /* lang sets the accent and allows the SpeechRecognition engine to improve the result */
 
 
 
-/* Create an paragraph element and assign the variable p using the let statement. This is a block-scoped variable as
-it will be over-written by the textContent object created later */
-  let p = document.createElement('p');
-/* Get the words div using the document.querySelector and assign to the variable words*/
-  const words = document.querySelector('.words');
-/* Add a paragraph to the words element in the document */
-  words.appendChild(p);
+    /* Create a new instance of SpeechRecognition using the const declaration as it is a read-only variable */
+    const recognition = new SpeechRecognition();
+    /* interimResults is the property that sets the results of the speech recognition as final.
+  Setting this to true allows the results to be displayed as the user speaks rather than once the user has finished */
+    recognition.interimResults = true;
+    recognition.lang = 'en-GB'; /* lang sets the accent and allows the SpeechRecognition engine to improve the result */
 
 
 
-/* Get the recognition instance and add an event listener that listens for a result.
-When the result is returned, an event is created. The ES6 arrow function => replaces the function expression */
-  recognition.addEventListener('result', e => {
-
-/* The results contain SpeechRecognitionResult objects that can be accessed like an array */
-/* Create a variable called transcript, assign the results and convert them to an array */
-    const transcript = Array.from(e.results) /* The Array.from method creates an array from the results object */
-    .map(result => result[0]) /* Loop over the first result in the Array using the Map method */
-    .map(result => result.transcript) /* Run Map again on the result */
-    .join('') /* Use the Join method on the array and convert to a string */
+    /* Create an paragraph element and assign the variable p using the let statement. This is a block-scoped variable as
+    it will be over-written by the textContent object created later */
+    let p = document.createElement('p');
+    /* Get the words div using the document.querySelector and assign to the variable words*/
+    const words = document.querySelector('.words');
+    /* Add a paragraph to the words element in the document */
+    words.appendChild(p);
 
 
 
-/* Update the textContent of the paragraph element inside the html with the transcript results */
-p.textContent = transcript;
-/* The results are overwritten. To stop this, run a check to see if the results proporty is final */
-if(e.results[0].isFinal) {
-  p = document.createElement('p'); /* Create a new paragraph */
-  words.appendChild(p); /* Add the paragraph to the words div*/
-}
-    console.log(transcript);
-    //  console.log(e.results);
-  });
+    /* Get the recognition instance and add an event listener that listens for a result.
+    When the result is returned, an event is created. The ES6 arrow function => replaces the function expression */
+    recognition.addEventListener('result', e => {
 
-  /* By default, the continuous property of the SpeechRecognition, is set to false.
- This means, after the first result, the event has finished, therefore the service would stop.
- Restarting the service by listening for the end of the speech capture service and starting the function again */
-  recognition.addEventListener('end', recognition.start);
+      /* The results contain SpeechRecognitionResult objects that can be accessed like an array */
+      /* Create a variable called transcript, assign the results and convert them to an array */
+      const transcript = Array.from(e.results) /* The Array.from method creates an array from the results object */
+        .map(result => result[0]) /* Loop over the first result in the Array using the Map method */
+        .map(result => result.transcript) /* Run Map again on the result */
+        .join('') /* Use the Join method on the array and convert to a string */
 
-/* Start the recognition function */
-  recognition.start();
-  
+
+
+      /* Update the textContent of the paragraph element inside the html with the transcript results */
+      p.textContent = transcript;
+      /* The results are overwritten. To stop this, run a check to see if the results proporty is final */
+      if (e.results[0].isFinal) {
+        p = document.createElement('p'); /* Create a new paragraph */
+        words.appendChild(p); /* Add the paragraph to the words div*/
+      }
+      console.log(transcript);
+      //  console.log(e.results);
+    });
+
+    /* By default, the continuous property of the SpeechRecognition, is set to false.
+   This means, after the first result, the event has finished, therefore the service would stop.
+   Restarting the service by listening for the end of the speech capture service and starting the function again */
+    recognition.addEventListener('end', recognition.start);
+
+    /* Start the recognition function */
+    recognition.start();
+
   </script>
+
+  <style>
+    html {
+      font-size: 10px;
+    }
+
+    body {
+      background: #ffc600;
+      font-family: 'helvetica neue';
+      font-weight: 200;
+      font-size: 20px;
+    }
+
+    .words {
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem 1rem 5rem;
+      background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
+      background-size: 100% 3rem;
+      position: relative;
+      line-height: 3rem;
+    }
+
+    p {
+      margin: 0 0 3rem;
+    }
+
+    .words:before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      top: 0;
+      left: 30px;
+      bottom: 0;
+      border: 1px solid;
+      border-color: transparent #efe4e4;
+    }
+  </style>
 
 </body>
 
